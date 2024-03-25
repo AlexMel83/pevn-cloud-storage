@@ -3,7 +3,7 @@ require('dotenv').config({
 });
 const http = require('http');
 const express = require('express');
-const config = require('config');
+const config = require('./config/config.js');
 const cors = require('cors');
 
 const app =express();
@@ -18,6 +18,6 @@ app.use(
 );
 app.use("/uploads", express.static("uploads"));
 
-server.listen(config.get('serverPort'), ()=>{
-    console.log(`Server is running on port: ${config.get('serverPort')}`);
+server.listen(config.PORT, ()=>{
+    console.log(`Server is running on port: ${config.PORT}`);
 })

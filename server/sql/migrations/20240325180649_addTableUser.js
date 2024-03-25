@@ -13,10 +13,15 @@ exports.up = async function(knex) {
               table.increments("id").primary().notNullable();
               table.string("email", 100).notNullable().unique().index();
               table.string("password", 100).notNullable();
+              table.string("name", 100).nullable();
+              table.string("surname", 100).nullable();
+              table.string("phone", 100).nullable();
+              table.string("role", 50).defaultTo("user").notNullable();
+              table.string("activationlink", 255).nullable().index();
+              table.boolean("isactivated").defaultTo("false").notNullable();
               table.integer("diskspace").defaultTo(1024*3*10).notNullable();
               table.integer("usedspace").defaultTo(0).notNullable();
               table.string("avatar", 100).nullable();
-              table.text("social").nullable();
               table.jsonb("files").nullable();
               table.timestamp("created_at").defaultTo(knex.fn.now()).notNullable();
               table.timestamp("updated_at").defaultTo(knex.fn.now()).notNullable();

@@ -4,7 +4,9 @@ require('dotenv').config({
 const http = require('http');
 const express = require('express');
 const config = require('./config/config.js');
+const { routeInit } = require("./routes");
 const cors = require('cors');
+// const errorMiddleware = require("./middlewares/error-middleware.js");
 
 const app =express();
 const server = http.createServer(app);
@@ -17,6 +19,9 @@ app.use(
     })
 );
 app.use("/uploads", express.static("uploads"));
+
+routeInit(app, express);
+// app.use(errorMiddleware);
 
 server.listen(config.PORT, ()=>{
     console.log(`Server is running on port: ${config.PORT}`);

@@ -1,20 +1,21 @@
 const knex = require("./../config/knex.config");
 const { validationResult } = require("express-validator");
 const userModel = require('./../models/user-model');
+const ApiError = require("./../exceptions/api-errors");
 
 class UserController {
     async registration(req, res, next){
-        const errors = validationResult(req.body);
+        const {email, password, name, surname, phone} = req.body;
+        const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            return next(
-            ApiError.BadRequest("Помилка при валідації", errors.array()),
+            return res.status(400).send(
+                ApiError.BadRequest("Помилка при валідації", errors.array()),
             );
         }
         
         const trx = await knex.transaction();
         try{
-            const {email, password, name, surname, phone} = req.body;
             const payload = {
                 email, password, name, surname, phone,
             }
@@ -25,7 +26,11 @@ class UserController {
             return res.status(200).json(candidate);
         } catch(error){
             await trx.rollback();
-            throw error;
+            if (error.code === "23505") {
+                return res.status(400).send(ApiError.BadRequest(`Email ${email} already exists`));
+              } else {
+                return res.status(500).send(ApiError.IntServError(error.detail));
+              }
         }
     }
 

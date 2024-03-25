@@ -6,7 +6,7 @@ module.exports = function (app) {
       "/registration",
       body("email").isEmail().isAscii(),
       body("password").isLength({ min: 4, max: 32 }),
-      body("phone").isLength(12),
+      body("phone").isLength({ min: 12, max: 12 }),
       userController.registration,
     );
   };

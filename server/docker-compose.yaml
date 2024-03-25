@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: cloudstorage_api
+    build: .
+    env_file:
+      - .env_file
+    volumes:
+      - .:/app/
+      - /app/node_modules
+    ports:
+      - ${PORT}:5050
+    command: sh -c "npm run db:setup && npm run start"
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    container_name: cloudstorage_bd
+    image: postgres:16-alpine
+    env_file:
+      - .env
+    expose:
+      - ${POSTGRES_PORT}
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:

@@ -1,45 +1,30 @@
+require("dotenv").config({
+  path: `${__dirname}/../.${
+    process.env.NODE_ENV === "development" ? process.env.NODE_ENV : "development"
+  }.env`,
+});
+console.log(`${__dirname}/../.${
+  process.env.NODE_ENV === "development" ? process.env.NODE_ENV : "development"
+}.env`)
+
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: "postgresql",
     connection: {
-      filename: './dev.sqlite3'
-    }
+      host: process.env.POSTGRES_HOST,
+      port: process.env.POSTGRES_PORT,
+      user: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      debug: true,
+    },
+    pool: { min: 0, max: 7 },
+    seeds: {
+      directory: "./seeds/development",
+    },
   },
-
-  staging: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
-  },
-
-  production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
-  }
-
 };

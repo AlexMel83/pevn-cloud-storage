@@ -46,5 +46,7 @@ module.exports = function (app) {
       userController.login
     );
 
+    app.post("/logout", userController.logout);
+
   };
   

@@ -1,3 +1,5 @@
+const ApiError = require("./../exceptions/api-errors");
+
 const TokensTable = "tokens";
 
 async function getUserToken(userId, trx) {
@@ -23,9 +25,8 @@ async function saveToken(userId, refreshToken, trx) {
       });
     }
     return refreshToken;
-  } catch (e) {
-    console.error("Помилка транзакції:", e);
-    throw e;
+  } catch (error) {
+    return res.status(500).json(ApiError.IntServError(error));
   }
 }
 
@@ -34,10 +35,9 @@ async function deleteOneToken(refreshToken, trx) {
     const data = await trx(TokensTable)
       .where("refreshtoken", refreshToken)
       .del();
-    return "logout " + data;
-  } catch (e) {
-    console.error("Помилка транзакції:", e);
-    throw e;
+    return data + " user logout";
+  } catch (error) {
+    return res.status(500).json(ApiError.IntServError(error));
   }
 }
 

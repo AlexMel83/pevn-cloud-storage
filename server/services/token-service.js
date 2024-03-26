@@ -62,14 +62,14 @@ class TokenService {
       return token;
     }
   
-    // async removeToken(refreshToken, trx) {
-    //   try {
-    //     const tokenData = await tokenModel.deleteOneToken(refreshToken, trx);
-    //     return tokenData;
-    //   } catch (e) {
-    //     return null;
-    //   }
-    // }
+    async removeToken(refreshToken, trx) {
+      try {
+        const tokenData = await tokenModel.deleteOneToken(refreshToken, trx);
+        return tokenData;
+      } catch (error) {
+        return res.status(500).json(ApiError.IntServError(error));
+      }
+    }
   
     // async findToken(refreshToken, trx) {
     //   const tokenData = await tokenModel.findOneToken(refreshToken, trx);

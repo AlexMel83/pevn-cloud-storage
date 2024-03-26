@@ -59,7 +59,7 @@ class UserController {
         }
 
         if (!user.isactivated) {
-            // return res.status(400).json(ApiError.BadRequest(`Обліковий запис: ${email} не активовано. Перевірте пошту`));
+            return res.status(400).json(ApiError.BadRequest(`Обліковий запис: ${email} не активовано. Перевірте пошту`));
         }
 
         const isPassValid = bcrypt.compareSync(password, user.password);
@@ -80,6 +80,24 @@ class UserController {
             return res.status(500).json(ApiError.IntServError(error));
         }
     }
+
+    async logout(req, res, next) {
+        const trx = await knex.transaction();
+        try {
+          let { refreshToken } = req.cookies;
+          if(!refreshToken){
+            await trx.rollback();
+            return res.status(400).json(ApiError.AccessDeniedForRole('User already unlogined'));
+          }
+          const result = await tokenService.removeToken(refreshToken, trx);
+          res.clearCookie("refreshToken");
+          await trx.commit();
+          return res.status(200).json(result);
+        } catch (error) {
+          await trx.rollback();
+          return res.status(500).json(ApiError.IntServError(error));
+        }
+      }
 
 };
 

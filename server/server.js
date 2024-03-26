@@ -6,6 +6,7 @@ const express = require('express');
 const config = require('./config/config.js');
 const { routeInit } = require("./routes");
 const cors = require('cors');
+const cookieParser = require("cookie-parser");
 // const errorMiddleware = require("./middlewares/error-middleware.js");
 
 const app =express();
@@ -19,6 +20,7 @@ app.use(
     })
 );
 app.use("/uploads", express.static("uploads"));
+app.use(cookieParser());
 
 routeInit(app, express);
 // app.use(errorMiddleware);

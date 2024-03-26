@@ -1,5 +1,5 @@
 const userController = require("../controllers/user-controller");
-const { body, validationResult } = require("express-validator");
+const { body, param, validationResult } = require("express-validator");
 const ApiError = require("./../exceptions/api-errors");
 
 const passMin = 4, phoneLength = 12;
@@ -45,6 +45,18 @@ module.exports = function (app) {
       },
       userController.login
     );
+
+  app.get("/activate/:link", 
+    param('link').isLength({ min: 5 }).withMessage('Activation link must not be empty.'),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        next();
+    }, 
+    userController.activate
+  );
 
     app.post("/logout", userController.logout);
 

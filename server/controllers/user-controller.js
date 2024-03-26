@@ -4,8 +4,9 @@ const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const userModel = require('./../models/user-model');
 const tokenService = require("./../services/token-service");
+const { CLIENT_URL, API_URL, PORT } = process.env;
 const UserDto = require("./../dtos/user-dto");
-// const mailService = require("./../services/mail-service");
+const mailService = require("./../services/mail-service");
 const ApiError = require("./../exceptions/api-errors");
 
 class UserController {
@@ -24,16 +25,16 @@ class UserController {
 
             const [user] = await userModel.insertUser(userDto, trx);
             user.password = "secure";
-
-            // if (process.env.NODE_ENV === "development") {
-            //     await mailService.sendActivationMail(
-            //       email, `${API_URL}:${PORT}/activate/${activationlink}`,
-            //     );
-            //   } else {
-            //     await mailService.sendActivationMail(
-            //       email, `${API_URL}/activate/${activationlink}`,
-            //     );
-            //   }
+   
+            if (process.env.NODE_ENV === "development") {
+                await mailService.sendActivationMail(
+                  user.email, `${API_URL}:${PORT}/activate/${user.activationlink}`,
+                );
+              } else {
+                await mailService.sendActivationMail(
+                  user.email, `${API_URL}/activate/${user.activationlink}`,
+                );
+              }
 
             await trx.commit();
             return res.status(200).json(user);
@@ -97,7 +98,23 @@ class UserController {
           await trx.rollback();
           return res.status(500).json(ApiError.IntServError(error));
         }
-      }
+    }
+
+    async activate(req, res, next) {
+        const activationlink = req.params.link;
+        const [user] = await userModel.findUserByActivationLink(activationlink);
+            if (!user) {
+                return res.status(404).json(ApiError.NotFoundError(activationlink));
+            } else if (user.isactivated) {
+                return res.status(400).json(ApiError.BadRequest("User already activated"));
+            }
+        try {
+            const [email] = await userModel.activateUser(activationlink); 
+            return res.status(300).redirect(`${CLIENT_URL}/?email=${email.email}`);
+        } catch (error) {
+            return res.status(500).json(ApiError.IntServError(error));
+        }
+    }
 
 };
 

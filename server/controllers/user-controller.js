@@ -1,7 +1,9 @@
 const knex = require("./../config/knex.config");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
+const uuid = require("uuid");
 const userModel = require('./../models/user-model');
+const mailService = require("./../services/mail-service");
 const ApiError = require("./../exceptions/api-errors");
 
 class UserController {
@@ -18,7 +20,7 @@ class UserController {
         const trx = await knex.transaction();
         try{
             const payload = {
-                email, password, name, surname, phone,
+                email, name, surname, phone,
             }
 
             const candidate = await userModel.findUserByEmail(email, trx);
@@ -28,7 +30,20 @@ class UserController {
 
             payload.password = await bcrypt.hash(password, 15);
             payload.activationlink = uuid.v4();
+
             const user = await userModel.insertUser(payload, trx);
+
+            if (process.env.NODE_ENV === "development") {
+                await mailService.sendActivationMail(
+                  email,
+                  `${API_URL}:${PORT}/activate/${activationlink}`,
+                );
+              } else {
+                await mailService.sendActivationMail(
+                  email,
+                  `${API_URL}/activate/${activationlink}`,
+                );
+              }
 
             await trx.commit();
             return res.status(200).json(user);

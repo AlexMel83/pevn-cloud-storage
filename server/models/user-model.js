@@ -19,10 +19,15 @@ const userFields = [
     "updated_at",
 ];
 
+async function findUserByEmail(email, trx=knex){
+    return await trx(UsersTable).select(userFields).where("email", "=", email);
+}
+
 async function insertUser(userData, trx=knex) {
     return await trx(UsersTable).insert(userData).returning(userFields);
 };
 
 module.exports = {
+    findUserByEmail,
     insertUser,
 }

@@ -4,6 +4,7 @@
  */
 exports.up = async function(knex) {
     const coworkingsExists = await knex.schema.hasTable("users");
+    const tokensExists = await knex.schema.hasTable("tokens");
 
     const trx = await knex.transaction();
 
@@ -28,6 +29,15 @@ exports.up = async function(knex) {
             });
           }
 
+          if (!tokensExists) {
+            await trx.schema.createTable("tokens", function (table) {
+              table.increments("id").primary().notNullable().unique();
+              table.integer("user_id").notNullable().index();
+              table.text("refreshtoken").notNullable().index();
+              table.timestamp("created_at").defaultTo(knex.fn.now()).notNullable();
+            });
+          }
+
           await trx.commit();
     } catch(error){
       await trx.rollback();
@@ -48,6 +58,7 @@ exports.down = async function(knex) {
 
     try{
         await trx.schema.dropTableIfExists("users");
+        await trx.schema.dropTableIfExists("tokens");
 
         await trx.commit();
     } catch(error){

@@ -1,22 +1,14 @@
 const knex = require("./../config/knex.config");
-const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const userModel = require('./../models/user-model');
+const tokenService = require("./../services/token-service");
 const UserDto = require("./../dtos/user-dto");
 // const mailService = require("./../services/mail-service");
 const ApiError = require("./../exceptions/api-errors");
 
 class UserController {
     async registration(req, res, next){
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            return res.status(400).send(
-                ApiError.BadRequest("Помилка при валідації", errors.array()),
-            );
-        }
-
         const userDto = new UserDto(req.body);
         
         const trx = await knex.transaction();
@@ -26,7 +18,7 @@ class UserController {
                 return res.status(400).send(ApiError.BadRequest(`Email ${userDto.email} already exists`));
             }
 
-            userDto.password = await bcrypt.hash(req.body.password, 15);
+            userDto.password = await bcrypt.hash(req.body.password, 8);
             userDto.activationlink = uuid.v4();
 
             const user = await userModel.insertUser(userDto, trx);
@@ -55,6 +47,31 @@ class UserController {
                 return res.status(500).send(ApiError.IntServError(error.detail));
               }
         }
+    }
+
+    async login(req, res, next){
+        const {email, password} = req.body;
+
+        const user = await userModel.findUserByEmail(req.body.email);
+        [user] = user;
+        if(!user){
+            return res.status(404).send(ApiError.NotFoundError(email));
+        }
+
+        if (!user.isactivated) {
+            throw ApiError.BadRequest(`Обліковий запис: ${email} не активовано`);
+          }
+
+        const isPassValid = bcrypt.compareSync(password, user.password);
+        if(!isPassValid){
+            return res.status(404).send(ApiError.AccessDeniedForRole('Wrong password!'));
+        }
+
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateTokens({ ...userDto });
+        await tokenService.saveToken(userDto.id, tokens.refreshToken, trx);
+        res.cookie("refreshToken", userData.refreshToken, config.cookieOptions);
+        return { ...tokens, user: userDto };    
     }
 
 };

@@ -52,15 +52,15 @@ class UserController {
     async login(req, res, next){
         const {email, password} = req.body;
 
-        const user = await userModel.findUserByEmail(req.body.email);
+        let user = await userModel.findUserByEmail(req.body.email);
         [user] = user;
         if(!user){
             return res.status(404).send(ApiError.NotFoundError(email));
         }
 
-        if (!user.isactivated) {
-            throw ApiError.BadRequest(`Обліковий запис: ${email} не активовано`);
-          }
+        // if (!user.isactivated) {
+        //     return res.status(404).send(ApiError.BadRequest(`Обліковий запис: ${email} не активовано. Перевірте пошту`));
+        // }
 
         const isPassValid = bcrypt.compareSync(password, user.password);
         if(!isPassValid){

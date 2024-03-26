@@ -52,14 +52,15 @@ class TokenService {
     //   }
     // }
   
-    // async saveToken(userId, refreshToken, trx) {
-    //   const tokenData = await tokenModel.getUserToken({ userId }, trx);
-    //   if (tokenData.length) {
-    //     tokenData.refreshToken = refreshToken;
-    //   }
-    //   const token = await tokenModel.saveToken(userId, refreshToken, trx);
-    //   return token;
-    // }
+    async saveToken(userId, refreshToken, trx) {
+      const [tokenData] = await tokenModel.getUserToken({ userId }, trx);
+      if (tokenData) {
+        tokenData.refreshtoken = refreshToken;
+      }
+      
+      const token = await tokenModel.saveToken(userId, refreshToken, trx);
+      return token;
+    }
   
     // async removeToken(refreshToken, trx) {
     //   try {

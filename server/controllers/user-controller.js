@@ -1,3 +1,4 @@
+const config = require("./../config/config");
 const knex = require("./../config/knex.config");
 const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
@@ -21,8 +22,8 @@ class UserController {
             userDto.password = await bcrypt.hash(req.body.password, 8);
             userDto.activationlink = uuid.v4();
 
-            const user = await userModel.insertUser(userDto, trx);
-            user[0].password = "secure";
+            const [user] = await userModel.insertUser(userDto, trx);
+            user.password = "secure";
 
             // if (process.env.NODE_ENV === "development") {
             //     await mailService.sendActivationMail(
@@ -52,26 +53,32 @@ class UserController {
     async login(req, res, next){
         const {email, password} = req.body;
 
-        let user = await userModel.findUserByEmail(req.body.email);
-        [user] = user;
+        let [user] = await userModel.findUserByEmail(email);
         if(!user){
-            return res.status(404).send(ApiError.NotFoundError(email));
+            return res.status(404).json(ApiError.NotFoundError(email));
         }
 
-        // if (!user.isactivated) {
-        //     return res.status(404).send(ApiError.BadRequest(`Обліковий запис: ${email} не активовано. Перевірте пошту`));
-        // }
+        if (!user.isactivated) {
+            // return res.status(400).json(ApiError.BadRequest(`Обліковий запис: ${email} не активовано. Перевірте пошту`));
+        }
 
         const isPassValid = bcrypt.compareSync(password, user.password);
         if(!isPassValid){
-            return res.status(404).send(ApiError.AccessDeniedForRole('Wrong password!'));
+            return res.status(400).json(ApiError.AccessDeniedForRole('Wrong password!'));
         }
 
-        const userDto = new UserDto(user);
-        const tokens = tokenService.generateTokens({ ...userDto });
-        await tokenService.saveToken(userDto.id, tokens.refreshToken, trx);
-        res.cookie("refreshToken", userData.refreshToken, config.cookieOptions);
-        return { ...tokens, user: userDto };    
+        const trx = await knex.transaction();
+        try{
+            const userDto = new UserDto(user);
+            const tokens = tokenService.generateTokens({ ...userDto });
+            await tokenService.saveToken(userDto.id, tokens.refreshToken, trx);
+            res.cookie("refreshToken", tokens.refreshToken, config.cookieOptions);
+            await trx.commit();
+            return res.json({ ...tokens, user: userDto });  
+        }  catch(error) {
+            await trx.rollback();
+            return res.status(500).json(ApiError.IntServError(error));
+        }
     }
 
 };

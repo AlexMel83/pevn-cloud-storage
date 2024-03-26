@@ -7,13 +7,14 @@
     "dev": "cross-env NODE_ENV=development nodemon server.js",
     "start": "cross-env NODE_ENV=production node server.js",
     "db:clean": "cd ./sql/ && knex migrate:rollback",
-    "db:setup": "cd ./sql/ && knex migrate:latest && knex seed:run",
+    "db:setup": "cd ./sql/ && knex migrate:latest",
     "devdb:clean": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:rollback",
     "devdb:setup": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:latest && cross-env NODE_ENV=development knex seed:run"
   },
   "author": "AlexMel83",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "config": "^3.3.11",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
@@ -22,7 +23,8 @@
     "express-validator": "^7.0.1",
     "knex": "^3.1.0",
     "node-pg-migrate": "^6.2.2",
-    "nodemailer": "^6.9.13"
+    "nodemailer": "^6.9.13",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

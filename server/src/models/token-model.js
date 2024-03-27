@@ -26,7 +26,7 @@ async function saveToken(userId, refreshToken, trx) {
     }
     return refreshToken;
   } catch (error) {
-    return res.status(500).json(ApiError.IntServError(error));
+    throw ApiError.IntServError(error);
   }
 }
 
@@ -37,7 +37,7 @@ async function deleteOneToken(refreshToken, trx) {
       .del();
     return data + " user logout";
   } catch (error) {
-    return res.status(500).json(ApiError.IntServError(error));
+    throw ApiError.IntServError(error);
   }
 }
 

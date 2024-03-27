@@ -9,7 +9,11 @@
     "db:clean": "cd ./sql/ && knex migrate:rollback",
     "db:setup": "cd ./sql/ && knex migrate:latest",
     "devdb:clean": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:rollback",
-    "devdb:setup": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:latest && cross-env NODE_ENV=development knex seed:run"
+    "devdb:setup": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:latest && cross-env NODE_ENV=development knex seed:run",
+    "prepare" : "husky install",
+    "test": "node --test .",
+    "precommit": "eslint . && prettier -c . && npm run test",
+    "lint": "eslint . && prettier -w ."
   },
   "author": "AlexMel83",
   "license": "ISC",
@@ -29,6 +33,10 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5"
   }
 }

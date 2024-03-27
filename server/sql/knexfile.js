@@ -1,17 +1,22 @@
 require("dotenv").config({
   path: `${__dirname}/../.${
-    process.env.NODE_ENV === "development" ? process.env.NODE_ENV : "development"
+    process.env.NODE_ENV === "development"
+      ? process.env.NODE_ENV
+      : "development"
   }.env`,
 });
-console.log(`${__dirname}/../.${
-  process.env.NODE_ENV === "development" ? process.env.NODE_ENV : "development"
-}.env`)
+console.log(
+  `${__dirname}/../.${
+    process.env.NODE_ENV === "development"
+      ? process.env.NODE_ENV
+      : "development"
+  }.env`,
+);
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 module.exports = {
-
   development: {
     client: "postgresql",
     connection: {

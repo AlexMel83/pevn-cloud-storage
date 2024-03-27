@@ -1,26 +1,26 @@
 <template>
   <main>
     <header class="header">
-      <img src="/logo.svg" alt="logo" class="header-logo">
+      <img src="/logo.svg" alt="logo" class="header-logo" />
       <h2>My Favorite Movies</h2>
-      <div class="movies">
-      </div>
+      <div class="movies"></div>
     </header>
     <div class="movies">
       <h3>All Movies</h3>
-      <Movie v-for="movie of movieStore.movies"
-      :key="movie.id" 
-      :movie="movie"/>
+      <Movie
+        v-for="movie of movieStore.movies"
+        :key="movie.id"
+        :movie="movie"
+      />
     </div>
   </main>
 </template>
 
 <script setup>
-import Movie from './src/components/Movie.vue'
-import {useMovieStore} from './src/stores/MovieStore';
+import Movie from "./src/components/Movie.vue";
+import { useMovieStore } from "./src/stores/MovieStore";
 
 const movieStore = useMovieStore();
-
 </script>
 
 <style lang="css">

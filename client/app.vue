@@ -34,13 +34,13 @@
       />
     </div>
     <div class="search" v-else>
-      <Search/>
+      <Search />
     </div>
   </main>
 </template>
 
 <script setup>
-import Search from './src/components/Search.vue'
+import Search from "./src/components/Search.vue";
 import Movie from "./src/components/Movie.vue";
 import { useMovieStore } from "./src/stores/MovieStore";
 

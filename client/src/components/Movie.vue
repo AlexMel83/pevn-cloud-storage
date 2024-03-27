@@ -26,11 +26,7 @@
         </button>
       </div>
       <div class="movie-buttons" v-else>
-        <button
-          class="btn btn_green"
-        >
-          Add
-        </button>
+        <button class="btn btn_green">Add</button>
       </div>
     </div>
   </div>
@@ -50,8 +46,8 @@ const props = defineProps({
   isSearch: {
     type: Boolean,
     required: false,
-    default: false
-  }
+    default: false,
+  },
 });
 </script>
 

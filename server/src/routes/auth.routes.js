@@ -1,6 +1,6 @@
 const userController = require("../controllers/user-controller");
 const { body, param, validationResult } = require("express-validator");
-const ApiError = require("./../exceptions/api-errors");
+const ApiError = require("../exceptions/api-errors");
 
 const passMin = 4, phoneLength = 12;
 

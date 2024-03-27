@@ -1,9 +1,9 @@
 require('dotenv').config({
-    path: __dirname +`/.${process.env.NODE_ENV}.env`,
+    path: __dirname +`/../.${process.env.NODE_ENV}.env`,
 });
 const http = require('http');
 const express = require('express');
-const config = require('./config/config.js');
+const config = require('../config/config');
 const { routeInit } = require("./routes");
 const cors = require('cors');
 const cookieParser = require("cookie-parser");

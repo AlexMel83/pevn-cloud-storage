@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { JWT_AC_SECRET, JWT_AC_EXP, JWT_RF_SECRET, JWT_RF_EXP } = process.env;
 const tokenModel = require("./../models/token-model");
-const userModel = require("./../models/user-model");
 const ApiError = require("./../exceptions/api-errors");
 
 class TokenService {

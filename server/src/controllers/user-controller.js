@@ -1,5 +1,5 @@
-const config = require("./../config/config");
-const knex = require("./../config/knex.config");
+const config = require("./../../config/config");
+const knex = require("./../../config/knex.config");
 const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const userModel = require('./../models/user-model');

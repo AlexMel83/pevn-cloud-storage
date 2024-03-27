@@ -1,0 +1,21 @@
+{
+  "name": "pevn-cloud-storage",
+  "version": "1.0.0",
+  "description": "root package",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint . && prettier -w .",
+    "test": "node --test .",
+    "precommit": "npx eslint . && npx prettier --check . && npm run test",
+    "prepare": "husky install"
+  },
+  "author": "AlexMel83",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.24.0",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5"
+  }
+}

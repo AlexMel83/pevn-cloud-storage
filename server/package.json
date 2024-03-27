@@ -10,7 +10,7 @@
     "db:setup": "cd ./sql/ && knex migrate:latest",
     "devdb:clean": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:rollback",
     "devdb:setup": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:latest && cross-env NODE_ENV=development knex seed:run",
-    "prepare" : "husky install",
+    "prepare": "husky install",
     "test": "node --test .",
     "precommit": "eslint . && prettier -c . && npm run test",
     "lint": "eslint . && prettier -w ."

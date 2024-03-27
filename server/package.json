@@ -10,7 +10,6 @@
     "db:setup": "cd ./sql/ && knex migrate:latest",
     "devdb:clean": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:rollback",
     "devdb:setup": "cd ./sql/ && cross-env NODE_ENV=development knex migrate:latest && cross-env NODE_ENV=development knex seed:run",
-    "prepare": "husky install",
     "test": "node --test .",
     "precommit": "eslint . && prettier -c . && npm run test",
     "lint": "eslint . && prettier -w ."
@@ -22,7 +21,6 @@
     "config": "^3.3.11",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
     "express-validator": "^7.0.1",
@@ -33,9 +31,9 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "husky": "^9.0.11",
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5"
   }

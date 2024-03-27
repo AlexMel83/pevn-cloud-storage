@@ -6,10 +6,20 @@
       <div class="movies"></div>
     </header>
     <div class="tabs">
-      <button :class="['btn', {btn_green: movieStore.activeTab === 1}]" @click="setTab(1)">Favorite</button>
-      <button :class="['btn', {btn_green: movieStore.activeTab === 2}]" @click="setTab(2)">Search</button>
+      <button
+        :class="['btn', { btn_green: movieStore.activeTab === 1 }]"
+        @click="setTab(1)"
+      >
+        Favorite
+      </button>
+      <button
+        :class="['btn', { btn_green: movieStore.activeTab === 2 }]"
+        @click="setTab(2)"
+      >
+        Search
+      </button>
     </div>
-    <div class="movies" v-if="movieStore.activeTab === 1" >
+    <div class="movies" v-if="movieStore.activeTab === 1">
       <h3>Watched Movies</h3>
       <Movie
         v-for="movie of movieStore.watchedMovies"
@@ -23,7 +33,7 @@
         :movie="movie"
       />
     </div>
-    <div class="search" v-else >Search</div>
+    <div class="search" v-else>Search</div>
   </main>
 </template>
 
@@ -33,8 +43,7 @@ import { useMovieStore } from "./src/stores/MovieStore";
 
 const movieStore = useMovieStore();
 
-const setTab = (id)=>movieStore.setActiveTab(id);
-
+const setTab = (id) => movieStore.setActiveTab(id);
 </script>
 
 <style lang="css">

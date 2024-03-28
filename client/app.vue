@@ -26,7 +26,7 @@
         :key="movie.id"
         :movie="movie"
       />
-      <h3>All Movies</h3>
+      <h3>All Movies (count: {{ movieStore.totalCountMovies }})</h3>
       <Movie
         v-for="movie of movieStore.movies"
         :key="movie.id"

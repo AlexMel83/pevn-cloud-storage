@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 
 // export const useMovieStore = defineStore("movieStore", {
 //   state: () => ({
@@ -28,6 +28,16 @@ import { ref, computed } from "vue";
 export const useMovieStore = defineStore("movieStore", () => {
   const movies = ref([]);
   const activeTab = ref(2);
+
+  onMounted(() => {
+    const moviesInLocalStorage = localStorage.getItem("movies");
+    if (moviesInLocalStorage) {
+      movies.value = JSON.parse(moviesInLocalStorage)._value;
+    }
+    watch(()=>movies, (state)=>{
+      localStorage.setItem('movies', JSON.stringify(state));
+    }, {deep: true})
+  });
 
   const setActiveTab = (id) => {
     activeTab.value = id;

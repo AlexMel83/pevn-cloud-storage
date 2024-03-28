@@ -17,10 +17,10 @@ export const useSearchStore = defineStore("searchStore", {
       this.movies = data.results;
       this.loader = false;
     },
-    addToUserMovies(object){
-        const movieStore = useMovieStore();
-        movieStore.movies.push({...object, isWatched: false});
-        movieStore.activeTab = 1;
-    }
+    addToUserMovies(object) {
+      const movieStore = useMovieStore();
+      movieStore.movies.push({ ...object, isWatched: false });
+      movieStore.activeTab = 1;
+    },
   },
 });

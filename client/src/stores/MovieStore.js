@@ -34,9 +34,13 @@ export const useMovieStore = defineStore("movieStore", () => {
     if (moviesInLocalStorage) {
       movies.value = JSON.parse(moviesInLocalStorage)._value;
     }
-    watch(()=>movies, (state)=>{
-      localStorage.setItem('movies', JSON.stringify(state));
-    }, {deep: true})
+    watch(
+      () => movies,
+      (state) => {
+        localStorage.setItem("movies", JSON.stringify(state));
+      },
+      { deep: true },
+    );
   });
 
   const setActiveTab = (id) => {

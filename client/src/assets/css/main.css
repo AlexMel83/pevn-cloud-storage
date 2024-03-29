@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400&display=swap");
+
+:root {
+  --background-color: #e9e6e6;
+  --font-color: #568885;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  width: 100%;
+  color: var(--font-color);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  font: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+.app {
+  display: flex;
+  flex-direction: column;
+}
+.wrap {
+  width: 1140px;
+  display: flex;
+  flex-direction: column;
+}

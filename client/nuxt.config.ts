@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
-    '~/src/assets/main.css'
+    '~/src/assets/css/main.css'
   ],
   plugins: [
     '~/plugins/pinia.js'

@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import {useStorageStore} from '~/src/stores/storageStore';
+import { useStorageStore } from "~/src/stores/storageStore";
 
 const storageStore = useStorageStore();
 </script>

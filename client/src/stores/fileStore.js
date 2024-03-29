@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useFileStore = defineStore('file', {
+export const useFileStore = defineStore("file", {
   state: () => ({
     // ваше начальное состояние
   }),
@@ -9,5 +9,5 @@ export const useFileStore = defineStore('file', {
   },
   actions: {
     // здесь вы можете добавлять методы для обновления состояния
-  }
-})
+  },
+});
